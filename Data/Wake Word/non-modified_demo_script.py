@@ -5,6 +5,7 @@ import wave
 import pyaudio
 import os
 import time
+import sys
 
 CHUNK = 2048
 FORMAT = pyaudio.paInt16
@@ -12,7 +13,11 @@ CHANNELS = 1
 RATE = 16000
 RECORD_SECONDS = 2.5
 
+p = pyaudio.PyAudio()
+in_device = p.get_default_input_device_info()
+out_device = p.get_default_output_device_info()
 quit_inp = 0 # var for quitting out of program
+
 
 # program loop
 while (quit_inp != 'q'):    
@@ -23,7 +28,7 @@ while (quit_inp != 'q'):
         # ensures proper input of either ww or notww
         while not(feat_type == "ww" or feat_type == "notww"): 
                 feat_type = input("WW or NotWW: ").lower()
-
+        filename = None
         if (feat_type == "ww"):
                 target_dir = "Wake Word" # used for setting the correct directory
                 ww_noise = 0
@@ -39,7 +44,15 @@ while (quit_inp != 'q'):
 
                 while not(ww_noise == 'q' or ww_noise == 'm' or ww_noise == 'l'):
                         ww_noise = input("Noise Level - Quiet (Q) Moderate (M) Loud (L): ").lower()
-
+                filename = target_dir +\
+                                 "/ww_" +\
+                                 gender + "_" +\
+                                 ww_descr + "_" +\
+                                 ww_loc + "_" +\
+                                 last_name + "_" +\
+                                 first_name + "_" +\
+                                 time.strftime("%m%d%Y%H%M%S",time.localtime()) + "_" +\
+                                 "aikens.wav"
         else:
                 target_dir = "Not Wake Word"
                 nww_noise = 0
@@ -48,7 +61,12 @@ while (quit_inp != 'q'):
                 
                 while not(nww_noise == 'q' or nww_noise == 'm' or nww_noise == 'l'):
                         nww_noise = input("Noise Level - Quiet (Q) Moderate (M) Loud (L): ").lower()
-
+                filename = target_dir +\
+                                 "/notww_" +\
+                                 nww_descr + "_" +\
+                                 nww_loc + "_" +\
+                                 time.strftime("%m%d%Y%H%M%S",time.localtime())+ "_" +\
+                                 "aikens.wav"
         # description session loop
         while (end_desc_sess != 'e'):
                 p = pyaudio.PyAudio()

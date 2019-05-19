@@ -116,6 +116,7 @@ if read == "y":
 
 else:
     model = 0
+
     while (model not in os.listdir()):
         model = input("Input Model Name: ")
     
@@ -126,7 +127,6 @@ stream = p.open(format = FORMAT, channels = CHANNELS, rate = RATE, input = True,
 frames = []
 false_act = 0
 act_count = 0
-
 
 while not(false_act == "y" or false_act == "n"):
     false_act = input("False Activation Collection Mode? (y or n): ")
